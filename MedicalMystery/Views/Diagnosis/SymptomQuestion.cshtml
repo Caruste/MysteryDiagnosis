@@ -2,16 +2,15 @@
     Reference:  https://www.webslesson.info/2016/02/dynamically-add-remove-input-fields-in-php-with-jquery-ajax.html
 *@
 
-<form name="add_symptom" id="add_symptom" style="margin-top: 20px; margin-bottom: 25px;">
+<form name="add_symptom" id="add_symptom" style="margin-top: 20px;">
     <div class="table-responsive">
         <table class="table table-bordered" id="dynamic_field">
             <tr>
-                <td><b class="form-control symptom0">First symptom</b></td>
+                <td><b class="form-control symptom0"></b></td>
                 <td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>
                 <td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>
             </tr>
         </table>
-        <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
     </div>
 </form>
 <div class="table-responsive">
@@ -23,9 +22,26 @@
 </div>
 
 
+
+
 @section Scripts {
     <script>
         $(document).ready(function () {
+            var positiveList = [];
+            var negativeList = [];
+            $.ajax({
+                type: "POST",
+                url: "/api/Test/ForQuestions",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    positive: positiveList,
+                    negative: negativeList
+                }),
+                dataType: "json",
+                success: function (data) {
+                    $('.symptom0').html(data);
+                }
+            });
             $(document).on('click', '.symptom_remove', function () {
                 var button_id = $(this).attr("id");
                 $('#row' + button_id + '').remove();
@@ -49,23 +65,40 @@
                     }
                 });
             });
-
-            var positiveList = [];
-            var negativeList = [];
+            var next = '';
             var i = 0;
             $(document).on('click', '.unused', function () {
                 $('.unused').removeClass('unused').addClass('used');
-                if ((this).innerHTML == "Yes") positiveList.push($('.symptom' + i).html());
-                if ((this).innerHTML == "No") negativeList.push($('.symptom' + i).html());
+                if ((this).innerHTML == "Yes") {
+                    positiveList.push($('.symptom' + i).html());
+                    $('.symptom' + i).css("background-color", "GreenYellow");
+                }
+                if ((this).innerHTML == "No") {
+                    negativeList.push($('.symptom' + i).html());
+                    $('.symptom' + i).css("background-color", "orange");
+                }
                 i++;
-                $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '"> First symptom</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Test/ForQuestions",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        positive: positiveList,
+                        negative: negativeList
+                    }),
+                    dataType: "json",
+                    success: function (data) {
+                        $(".symptom").remove();
+                        next = data;
+                        if (data.name) {
+                            $('#symptoms').append('<p class="symptom">' + data.name + '</p>');
+                        } else {
+                            $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '">' + next + '</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
+                        }
+                    }
+                });
             });
         });
-
-
-        function checkSymptoms() {
-            // check symptoms with API by passing through symptoms
-            window.alert($('#symptoms').val())
-        }
     </script>
 }
