@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Domains.Disease>
+
+<div class="col-md-8" style="margin-top: 20px">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td colspan="2">
+                    <h4 style="text-align:center">
+                        Three diseases with most symptoms
+                    </h4>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th style="text-align:center">Name</th>
+                <th style="text-align:center">Symptoms</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th>
+                        @item.name
+                    </th>
+
+                    <th>
+                        @foreach (var str in item.symptoms)
+                        {
+                            <p > @str</p>
+                        }
+                    </th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col-md-4" style="margin-top: 20px">
+    <table id="symptoms" class="table table-bordered">
+        <tr>
+            <th>
+                <h4 style="text-align:center">Three most frequent symptoms</h4>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="col-md-4">
+    <b>Amount of unique symptoms: </b>
+    <span id="symptomAmount"></span>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/api/Test/Amount",
+                contentType: "application-json; charset=utf-8",
+                dataType: "json"
+            }).success(function (data) {
+                document.getElementById("symptomAmount").innerHTML = data;
+            })
+            $.ajax({
+                type: "GET",
+                url: "/api/Test/Symptoms",
+                contentType: "application-json; charset=utf-8",
+                dataType: "json"
+            }).success(function (data) {
+                $.each(data, function (i, v) {
+                    $('#symptoms').append('<tr class="symptom"><th>' + v + '</th></tr>');
+                });
+            })
+        });
+
+        function checkSymptoms() {
+            // check symptoms with API by passing through symptoms
+            window.alert($('#symptoms').val())
+        }
+
+        function addSymptoms() {
+            // Add inputDiseases to the database!
+            // Use the ideas from this:
+            // https://stackoverflow.com/questions/28241954/splitting-text-in-textarea-by-new-lines-including-empty-lines-into-javascript
+            window.alert($('#inputDiseases').val())
+        }
+
+    </script>
+}

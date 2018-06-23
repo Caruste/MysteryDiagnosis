@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedicalMystery", "MedicalMystery\MedicalMystery.csproj", "{E7892A4F-B46B-4BFF-ABC3-F89E2887D176}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.Interfaces", "DAL.Interfaces\DAL.Interfaces.csproj", "{2C3FEDC3-C36C-405A-96DC-6B07FE990C66}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.Repository", "DAL.Repository\DAL.Repository.csproj", "{B82C779D-E2FA-472C-B12A-54E1CA83162C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains", "Domains\Domains.csproj", "{76059B30-A25D-4547-907A-CF4FFC57A26A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.App.Database", "DAL.App.Database\DAL.App.Database.csproj", "{E2FABFB0-FEFC-4683-A3FB-EE0941CE76B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL.App.Interfaces", "DAL.App.Interfaces\DAL.App.Interfaces.csproj", "{BF2B2541-FEB0-4FED-A422-076D119E35E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BL", "BL\BL.csproj", "{4EC2C03A-2595-4426-B395-C9FA9A19C39A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7892A4F-B46B-4BFF-ABC3-F89E2887D176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7892A4F-B46B-4BFF-ABC3-F89E2887D176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7892A4F-B46B-4BFF-ABC3-F89E2887D176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7892A4F-B46B-4BFF-ABC3-F89E2887D176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C3FEDC3-C36C-405A-96DC-6B07FE990C66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C3FEDC3-C36C-405A-96DC-6B07FE990C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C3FEDC3-C36C-405A-96DC-6B07FE990C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C3FEDC3-C36C-405A-96DC-6B07FE990C66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B82C779D-E2FA-472C-B12A-54E1CA83162C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B82C779D-E2FA-472C-B12A-54E1CA83162C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B82C779D-E2FA-472C-B12A-54E1CA83162C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B82C779D-E2FA-472C-B12A-54E1CA83162C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76059B30-A25D-4547-907A-CF4FFC57A26A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76059B30-A25D-4547-907A-CF4FFC57A26A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76059B30-A25D-4547-907A-CF4FFC57A26A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76059B30-A25D-4547-907A-CF4FFC57A26A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2FABFB0-FEFC-4683-A3FB-EE0941CE76B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2FABFB0-FEFC-4683-A3FB-EE0941CE76B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2FABFB0-FEFC-4683-A3FB-EE0941CE76B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2FABFB0-FEFC-4683-A3FB-EE0941CE76B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2B2541-FEB0-4FED-A422-076D119E35E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2B2541-FEB0-4FED-A422-076D119E35E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2B2541-FEB0-4FED-A422-076D119E35E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2B2541-FEB0-4FED-A422-076D119E35E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC2C03A-2595-4426-B395-C9FA9A19C39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC2C03A-2595-4426-B395-C9FA9A19C39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC2C03A-2595-4426-B395-C9FA9A19C39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC2C03A-2595-4426-B395-C9FA9A19C39A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79DBF905-FA1A-481C-8F2E-B195FB642B10}
+	EndGlobalSection
+EndGlobal

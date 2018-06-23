@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@*
+    Reference:  https://www.webslesson.info/2016/02/dynamically-add-remove-input-fields-in-php-with-jquery-ajax.html
+*@
+
+<form name="add_symptom" id="add_symptom" style="margin-top: 20px; margin-bottom: 25px;">
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dynamic_field">
+            <tr>
+                <td><input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list" /></td>
+                <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>
+            </tr>
+        </table>
+        <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
+    </div>
+</form>
+<div class="table-responsive">
+    <table id="symptoms" class="table table-bordered">
+        <tr>
+            <th>Possible diseases</th>
+        </tr>
+    </table>
+</div>
+
+
+@section Scripts {
+<script>
+        $(document).ready(function () {
+            var i = 1;
+            $('#add').click(function () {
+                i++;
+                $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list" /></td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">X</button></td></tr>');
+            });
+            $(document).on('click', '.btn_remove', function () {
+                var button_id = $(this).attr("id");
+                $('#row' + button_id + '').remove();
+            });
+            $('#submit').click(function () {
+
+                var lines = [];
+                $.each($('#add_symptom').serializeArray(), function (i, v) {
+                    if (v.value) lines.push(v.value);
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Test",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(lines),
+                    dataType: "json",
+                    success: function (data) {
+                        $(".symptom").remove();
+                        $.each(data, function (i, v) {
+                            $('#symptoms').append('<p class="symptom">' + v.name + '</p>');
+                        });
+                    }
+                });
+            });
+        });
+
+
+
+        function checkSymptoms() {
+            // check symptoms with API by passing through symptoms
+            window.alert($('#symptoms').val())
+        }
+</script>
+}

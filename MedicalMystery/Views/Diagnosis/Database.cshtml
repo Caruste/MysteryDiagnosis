@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Domains.Disease>
+
+<div style="margin-top: 20px">
+    <b>Input the database here</b>
+    <p></p>
+    <textarea id="inputDiseases"></textarea>
+    <p></p>
+    <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th><h2>Name</h2></th>
+            <th><h2>Symptoms</h2></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.name</th>
+                <th>
+                    @foreach (var str in item.symptoms)
+                    {
+                        <p>@str</p>
+                    }
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#submit').click(function () {
+                var lines = [];
+                $.each($('#inputDiseases').val().split(/\n/), function (i, line) {
+                    if (line) lines.push(line);
+                });
+                alert(JSON.stringify(lines));
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/Test/Database",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify(lines),
+                        dataType: "json",
+                        success: function (data) {
+                            alert(data)
+                        }
+                    });
+            });
+        });
+    </script>
+}
