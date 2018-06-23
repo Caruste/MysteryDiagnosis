@@ -1,8 +1,4 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
-@*
     Reference:  https://www.webslesson.info/2016/02/dynamically-add-remove-input-fields-in-php-with-jquery-ajax.html
 *@
 
@@ -10,9 +6,9 @@
     <div class="table-responsive">
         <table class="table table-bordered" id="dynamic_field">
             <tr>
-                <td><b class="form-control symptom_list"> First symptom</b></td>
-                <td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td>
-                <td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td>
+                <td><b class="form-control symptom0">First symptom</b></td>
+                <td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>
+                <td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>
             </tr>
         </table>
         <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
@@ -35,7 +31,6 @@
                 $('#row' + button_id + '').remove();
             });
             $('#submit').click(function () {
-
                 var lines = [];
                 $.each($('#add_symptom').serializeArray(), function (i, v) {
                     if (v.value) lines.push(v.value);
@@ -54,12 +49,19 @@
                     }
                 });
             });
+
+            var positiveList = [];
+            var negativeList = [];
+            var i = 0;
+            $(document).on('click', '.unused', function () {
+                $('.unused').removeClass('unused').addClass('used');
+                if ((this).innerHTML == "Yes") positiveList.push($('.symptom' + i).html());
+                if ((this).innerHTML == "No") negativeList.push($('.symptom' + i).html());
+                i++;
+                $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '"> First symptom</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
+            });
         });
-        $(document).on('click', '.unused', function () {
-            alert("hi");
-            $('.unused').removeClass('unused').addClass('used');
-            $('#dynamic_field').append('<tr><td><b class="form-control symptom_list"> First symptom</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
-        });
+
 
         function checkSymptoms() {
             // check symptoms with API by passing through symptoms
