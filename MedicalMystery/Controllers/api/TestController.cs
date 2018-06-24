@@ -85,7 +85,6 @@ namespace MedicalMystery.Controllers
         [HttpPost("Database")]
         public IActionResult CreateDatabase([FromBody] List<string> input)
         {
-#warning Not adding items to the database.
             if (!System.IO.File.Exists("database/database.csv")) return NotFound();
             System.IO.File.WriteAllLines("database/database.csv", input);
             return Ok();
@@ -99,46 +98,27 @@ namespace MedicalMystery.Controllers
 
             if (input.positive != null)
             {
-                if (input.positive.Count == 0)
-                {
-                    hasAll = diseases;
-                }
-                else
-                {
-                    foreach (Disease item in diseases)
-                    {
-                        if (ContainsAllItems(item.symptoms, input.positive)) hasAll.Add(item);
-                    }
-                }
+                if (input.positive.Count == 0) hasAll = diseases;
+                else hasAll = diseases.Where(x => ContainsAllItems(x.symptoms, input.positive)).ToList();
             }
 
             List<Disease> final = new List<Disease>();
-
+            
             if (input.negative != null)
             {
-                if (input.negative.Count == 0)
-                {
-                    final = hasAll;
-                }
+                if (input.negative.Count == 0) final = hasAll;
                 else
-                {
-                    foreach (Disease item in hasAll)
-                    {
-                        final = hasAll.Where(x => !input.negative.Any(t => input.negative.Contains(t))).ToList(); 
-                    }   
-                }
+                    // This checks if there are any same symptoms in the disease and input negative. 
+                    // Disease can't contain anything form the input.negative as the user has answered no to it!
+                    final = hasAll.Where(x => !x.symptoms.Intersect(input.negative).Any()).ToList();
             }
 
-            var list = final.OrderByDescending(x => x.symptoms.Count);
-            Disease disease = new Disease();
+            var list = final.OrderBy(x => x.symptoms.Count).ToList();
             if (list.Count() <= 1) return Ok(list.FirstOrDefault());
-            if (list.FirstOrDefault().symptoms.Count == input.positive.Count) disease = list.ElementAt(1);
 
-#warning Must find diferences between the lists and use the element from that. If one has symptom#1 and another one has the same one then dont ask that. Must ask the one which both dont have.
+            List<string> symptomList = list.ElementAt(1).symptoms.Except(list.FirstOrDefault().symptoms).ToList();
 
-            else disease = list.FirstOrDefault();
-
-            foreach (var item in disease.symptoms)
+            foreach (var item in symptomList)
             {
                 if (!input.positive.Contains(item) && !input.negative.Contains(item)) return Ok(item);
             }
@@ -150,9 +130,6 @@ namespace MedicalMystery.Controllers
         {
             return !b.ConvertAll(x => x.ToLower()).Except(a.ConvertAll(x => x.ToLower())).Any();
         }
-#warning Setup database now so it would be easier later!
-#warning Must add a way to add String[] types to the database
-#warning Must start a database
     }
     public class Input
     {
