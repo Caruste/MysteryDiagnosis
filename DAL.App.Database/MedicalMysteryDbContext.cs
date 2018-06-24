@@ -30,6 +30,12 @@ namespace DAL.App.Database
                 .WithMany(m => m.SymptomsInDiseases)
                 .HasForeignKey(fk => fk.DiseaseId);
 
+            modelBuilder.Entity<SymptomsInDiseases>()
+                .Property(x => x.SymptomsInDiseasesId).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Symptom>()
+                .Property(x => x.SymptomId).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Disease>()
+                .Property(x => x.DiseaseId).ValueGeneratedOnAdd();
 
             base.OnModelCreating(modelBuilder);
         }

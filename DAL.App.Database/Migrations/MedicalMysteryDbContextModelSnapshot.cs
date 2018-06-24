@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DAL.App.Database.Migrations
+namespace DAL.App.EF.Migrations
 {
     [DbContext(typeof(MedicalMysteryDbContext))]
     partial class MedicalMysteryDbContextModelSnapshot : ModelSnapshot
@@ -54,7 +54,9 @@ namespace DAL.App.Database.Migrations
 
                     b.Property<int>("DiseaseId");
 
-                    b.Property<int>("SymptomsInDiseasesId");
+                    b.Property<int>("SymptomsInDiseasesId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("SymptomId", "DiseaseId");
 

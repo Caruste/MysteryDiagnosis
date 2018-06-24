@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace DAL.App.Database.Migrations
+namespace DAL.App.EF.Migrations
 {
     [DbContext(typeof(MedicalMysteryDbContext))]
-    [Migration("20180624114056_ChangedNameLength")]
-    partial class ChangedNameLength
+    [Migration("20180624151911_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,7 +56,9 @@ namespace DAL.App.Database.Migrations
 
                     b.Property<int>("DiseaseId");
 
-                    b.Property<int>("SymptomsInDiseasesId");
+                    b.Property<int>("SymptomsInDiseasesId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.HasKey("SymptomId", "DiseaseId");
 

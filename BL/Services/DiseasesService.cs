@@ -30,18 +30,21 @@ namespace BL.Services
                 diseases.Add(StringMutation.DiseaseFromString(item));
             }
 
-            int i = 0;
             foreach (Disease disease in diseases)
             {
                 if (_diseasesRepo.Exists(disease)) continue;
                 foreach (Symptom symptom in disease.Symptoms)
                 {
                     Symptom temp = _symptomsService.FindByName(symptom);
-                    if (temp == null) temp = symptom;
-                    else _symptomsService.AddSymptom(temp);
+                    if (temp == null)
+                    {
+                        temp = symptom;
+                        _symptomsService.AddSymptom(temp);
+                    }
 
-                    disease.SymptomsInDiseases.Add(_sidService.createNew(temp, disease, i++));
+                    disease.SymptomsInDiseases.Add(_sidService.createNew(temp, disease));
                 }
+                disease.Symptoms.Clear();
                 _diseasesRepo.Add(disease);
                 _diseasesRepo.SaveChanges();
 

@@ -8,13 +8,12 @@ namespace BL.Services
 {
     public class SymptomsInDiseaseService : ISymptomsInDiseaseService
     {
-        public SymptomsInDiseases createNew(Symptom symptom, Disease disease, int i)
+        public SymptomsInDiseases createNew(Symptom symptom, Disease disease)
         {
             return new SymptomsInDiseases()
             {
                 Symptom = symptom,
-                Disease = disease,
-                SymptomsInDiseasesId = i
+                Disease = disease
             };
         }
     }

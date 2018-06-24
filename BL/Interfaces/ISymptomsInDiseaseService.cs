@@ -7,6 +7,6 @@ namespace BL.Interfaces
 {
     public interface ISymptomsInDiseaseService
     {
-        SymptomsInDiseases createNew(Symptom symptom, Disease disease, int i);
+        SymptomsInDiseases createNew(Symptom symptom, Disease disease);
     }
 }
