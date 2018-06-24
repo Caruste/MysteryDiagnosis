@@ -32,6 +32,7 @@ namespace MedicalMystery
             services.AddScoped<DbContext, MedicalMysteryDbContext>();
             services.AddScoped<IDiseasesRepository, DiseasesRepository>();
             services.AddScoped<IDiseasesService, DiseasesService>();
+            services.AddScoped<ISymptomsRepository, SymptomsRepository>();
 
             services.AddMvc();
         }

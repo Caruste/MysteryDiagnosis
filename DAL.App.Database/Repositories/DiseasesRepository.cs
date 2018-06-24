@@ -2,6 +2,7 @@
 using DAL.Repository;
 using Domains;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DAL.App.Database.Repositories
@@ -10,6 +11,13 @@ namespace DAL.App.Database.Repositories
     {
         public DiseasesRepository(DbContext dbContext) : base(dbContext)
         {
+        }
+
+        public List<Disease> AllWithSymptoms()
+        {
+            return repoDbSet.Include(x => x.SymptomsInDiseases)
+                .ThenInclude(s => s.Symptom)
+                .ToList();
         }
 
         public bool Exists(Disease disease)

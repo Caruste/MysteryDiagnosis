@@ -43,7 +43,7 @@ namespace BL
             {
                 symptoms.Add(new Symptom()
                 {
-                    name = item
+                    Name = item
                 });
             }
             return symptoms;

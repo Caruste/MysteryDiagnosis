@@ -6,14 +6,16 @@ namespace Domains
 {
     public class Disease
     {
+        [Key]
         public int DiseaseId { get; set; }
 
         [Required]
-        [MaxLength(32)]
+        [MaxLength(256)]
         public string Name { get; set; }
         public List<SymptomsInDiseases> SymptomsInDiseases { get; set; } = new List<SymptomsInDiseases>();
 
-        public virtual List<Symptom> Symptoms { get; set; } = new List<Symptom>();
+        [NonSerialized]
+        public List<Symptom> Symptoms;
         [NonSerialized]
         public List<string> SymptomString;
     }

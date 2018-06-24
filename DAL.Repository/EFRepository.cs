@@ -25,7 +25,6 @@ namespace DAL.Repository
         public void Add(TEntity entity)
         {
             repoDbSet.Add(entity);
-            repoDbContext.SaveChanges();
         }
 
         public IEnumerable<TEntity> All()

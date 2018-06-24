@@ -6,9 +6,9 @@ using System.Text;
 
 namespace DAL.App.Interfaces.Interfaces
 {
-    public interface IDiseasesRepository: IRepository<Disease>
+    public interface ISymptomsRepository: IRepository<Symptom>
     {
-        bool Exists(Disease disease);
-        List<Disease> AllWithSymptoms();
+        bool Exists(Symptom symptom);
+        Symptom FindByName(Symptom symptom);
     }
 }
