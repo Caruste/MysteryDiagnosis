@@ -18,9 +18,15 @@ namespace DAL.App.Database.Repositories
         {
             return repoDbSet.Where(x => x.Name == symptom.Name).Any();
         }
-        public Symptom FindByName(Symptom symptom)
+
+        public Symptom FindByName(string name)
         {
-            return repoDbSet.Where(x => x.Name == symptom.Name).FirstOrDefault();
+            return repoDbSet.Where(x => x.Name == name).FirstOrDefault();
+        }
+
+        public int SymptomsCount()
+        {
+            return repoDbSet.Count();
         }
     }
 }

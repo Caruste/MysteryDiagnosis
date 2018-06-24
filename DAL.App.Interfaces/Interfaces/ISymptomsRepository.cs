@@ -9,6 +9,7 @@ namespace DAL.App.Interfaces.Interfaces
     public interface ISymptomsRepository: IRepository<Symptom>
     {
         bool Exists(Symptom symptom);
-        Symptom FindByName(Symptom symptom);
+        Symptom FindByName(string name);
+        int SymptomsCount();
     }
 }

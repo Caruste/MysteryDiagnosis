@@ -20,10 +20,12 @@ namespace MedicalMystery.Controllers
     {
         private readonly IDiseasesRepository _diseasesRepository;
         private readonly IDiseasesService _diseasesService;
-        public TestController(IDiseasesRepository diseasesRepository, IDiseasesService diseasesService)
+        private readonly ISymptomService _symptomService;
+        public TestController(IDiseasesRepository diseasesRepository, IDiseasesService diseasesService, ISymptomService symptomService)
         {
-            diseasesRepository = diseasesRepository;
+            _diseasesRepository = diseasesRepository;
             _diseasesService = diseasesService;
+            _symptomService = symptomService;
         }
 
         [HttpGet]
@@ -35,18 +37,7 @@ namespace MedicalMystery.Controllers
         [HttpGet("Amount")]
         public IActionResult symptomCount()
         {
-            IEnumerable<Disease> diseases = _diseasesRepository.All();
-            List<string> symptoms = new List<string>();
-
-            foreach (var disease in diseases)
-            {
-                foreach (var symptom in disease.SymptomString)
-                {
-                    if (!symptoms.Contains(symptom)) symptoms.Add(symptom);
-                }
-            }
-
-            return Ok(symptoms.Count);
+            return Ok(_symptomService.UniqueSymptomsCount());
         }
 
         [HttpGet("Symptoms")]

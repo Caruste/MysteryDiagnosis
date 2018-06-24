@@ -30,9 +30,17 @@ namespace MedicalMystery
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<DbContext, MedicalMysteryDbContext>();
+            #region Repositories
             services.AddScoped<IDiseasesRepository, DiseasesRepository>();
-            services.AddScoped<IDiseasesService, DiseasesService>();
             services.AddScoped<ISymptomsRepository, SymptomsRepository>();
+            #endregion
+
+
+            #region Services
+            services.AddScoped<IDiseasesService, DiseasesService>();
+            services.AddScoped<ISymptomService, SymptomService>();
+            services.AddScoped<ISymptomsInDiseaseService, SymptomsInDiseaseService>();
+            #endregion
 
             services.AddMvc();
         }

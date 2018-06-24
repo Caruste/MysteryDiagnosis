@@ -14,11 +14,14 @@ namespace BL.Services
 
         private readonly IDiseasesRepository _diseasesRepo;
         private readonly ISymptomsRepository _symptomsRepo;
+        private readonly ISymptomService _symptomsService;
+        private readonly ISymptomsInDiseaseService _sidService;
 
-        public DiseasesService(IDiseasesRepository diseasesRepository, ISymptomsRepository symptomsRepository)
+        public DiseasesService(IDiseasesRepository diseasesRepository, ISymptomService symptomsService, ISymptomsInDiseaseService symptomsInDiseaseService)
         {
             _diseasesRepo = diseasesRepository;
-            _symptomsRepo = symptomsRepository;
+            _symptomsService = symptomsService;
+            _sidService = symptomsInDiseaseService;
         }
         public void AddAll(List<string> list)
         {
@@ -28,28 +31,34 @@ namespace BL.Services
                 diseases.Add(StringMutation.DiseaseFromString(item));
             }
 
-            int i = 0; 
+            int i = 0;
             foreach (Disease disease in diseases)
             {
+                if (_diseasesRepo.Exists(disease)) continue;
                 foreach (Symptom symptom in disease.Symptoms)
                 {
-                    Symptom temp = symptom;
-                    if (_symptomsRepo.Exists(symptom)) temp = _symptomsRepo.FindByName(symptom);
-                    else
-                    {
-                        _symptomsRepo.Add(temp);
-                        _symptomsRepo.SaveChanges();
-                    }
-                    disease.SymptomsInDiseases.Add(new SymptomsInDiseases()
-                    {
-                        Disease = disease,
-                        Symptom = temp,
-                        SymptomsInDiseasesId = i++
-                    });
+                    Symptom temp = _symptomsService.FindByName(symptom);
+                    if (temp == null) temp = symptom;
+                    else _symptomsService.AddSymptom(temp);
+
+                    disease.SymptomsInDiseases.Add(_sidService.createNew(temp, disease, i++));
                 }
-                if (!_diseasesRepo.Exists(disease)) _diseasesRepo.Add(disease);
+                _diseasesRepo.Add(disease);
                 _diseasesRepo.SaveChanges();
+
             }
+        }
+
+        public List<Disease> AllWithSymptoms()
+        {
+            List<Disease> diseases = new List<Disease>();
+            foreach (var item in _diseasesRepo.AllWithSymptoms())
+            {
+                item.Symptoms = item.SymptomsInDiseases.Select(x => x.Symptom).ToList();
+                diseases.Add(item);
+            }
+
+            return diseases;
         }
     }
 }

@@ -5,10 +5,8 @@ using System.Text;
 
 namespace BL.Interfaces
 {
-    public interface IDiseasesService
+    public interface ISymptomsInDiseaseService
     {
-        void AddAll(List<string> list);
-
-        List<Disease> AllWithSymptoms();
+        SymptomsInDiseases createNew(Symptom symptom, Disease disease, int i);
     }
 }
