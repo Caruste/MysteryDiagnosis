@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BL.Interfaces;
+using BL.Services;
 using DAL.App.Database;
+using DAL.App.Database.Repositories;
 using DAL.App.Interfaces;
+using DAL.App.Interfaces.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +24,14 @@ namespace MedicalMystery
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDataContext, DbContext>();
+            //services.AddScoped<IDataContext, MedicalMysteryDbContext>();
+
+            services.AddDbContext<MedicalMysteryDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<DbContext, MedicalMysteryDbContext>();
+            services.AddScoped<IDiseasesRepository, DiseasesRepository>();
+            services.AddScoped<IDiseasesService, DiseasesService>();
 
             services.AddMvc();
         }
@@ -47,7 +55,7 @@ namespace MedicalMystery
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Diagnosis}/{action=Index}/{id?}");
+                    template: "{controller=Diagnosis}/{action=Database}/{id?}");
             });
         }
     }

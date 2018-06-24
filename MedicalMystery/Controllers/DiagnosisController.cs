@@ -4,30 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.Database;
 using DAL.App.Interfaces;
+using DAL.App.Interfaces.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalMystery.Controllers.api
 {
     public class DiagnosisController : Controller
     {
-        private readonly DbContext _dataContext;
-        public DiagnosisController(IDataContext context)
+        private readonly IDiseasesRepository _diseasesRepository;
+        public DiagnosisController(IDiseasesRepository diseasesRepository)
         {
-            _dataContext = context as DbContext;
+            _diseasesRepository = diseasesRepository;
         }
         public IActionResult Index()
         {
-            return View(
-                _dataContext.All()
-                    .OrderByDescending(x => x.symptoms.Count)
-                    .ThenBy(x => x.name)
-                    .Take(3)
-                );
+#warning Make this method return empty View! 
+
+            return View(_diseasesRepository.All());
+
+            //return View(
+            //    _dataContext.All()
+            //        .OrderByDescending(x => x.SymptomString.Count)
+            //        .ThenBy(x => x.Name)
+            //        .Take(3)
+            //    );
         }
 
         public IActionResult Database()
         {
-            return View(_dataContext.All());
+#warning Make this method return empty View! 
+            return View(_diseasesRepository.All());
         }
 
         public IActionResult CheckSymptoms()

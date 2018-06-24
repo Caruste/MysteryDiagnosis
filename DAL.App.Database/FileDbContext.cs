@@ -6,11 +6,11 @@ using System.IO;
 
 namespace DAL.App.Database
 {
-    public class DbContext : IDataContext
+    public class FileDbContext : IDataContext
     {
         private readonly IConfiguration _configuration;
 
-        public DbContext(IConfiguration configuration)
+        public FileDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -19,7 +19,7 @@ namespace DAL.App.Database
         {
             var csvLines = File.ReadAllLines(_configuration["Database"]);
             List<Disease> diseases = new List<Disease>();
-            
+
 
             foreach (var csvLine in csvLines)
             {
@@ -33,8 +33,8 @@ namespace DAL.App.Database
             string[] temp = input.Split(',');
             return new Disease()
             {
-                name = temp[0],
-                symptoms = allSymptoms(temp)
+                Name = temp[0],
+                SymptomString = allSymptoms(temp)
             };
         }
 

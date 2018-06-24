@@ -1,16 +1,20 @@
 ﻿using DAL.App.Interfaces.Interfaces;
+using DAL.Repository;
 using Domains;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DAL.App.Database.Repositories
 {
-    public class DiseasesRepository : IDiseasesRepository
+    public class DiseasesRepository : EFRepository<Disease>, IDiseasesRepository
     {
-        public IEnumerable<Disease> All()
+        public DiseasesRepository(DbContext dbContext) : base(dbContext)
         {
-            throw new NotImplementedException();
+        }
+
+        public bool Exists(Disease disease)
+        {
+            return repoDbSet.Where(x => x.Name == disease.Name).Any();
         }
     }
 }

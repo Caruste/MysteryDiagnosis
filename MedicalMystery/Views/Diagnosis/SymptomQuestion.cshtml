@@ -3,20 +3,20 @@
 *@
 
 <form name="add_symptom" id="add_symptom" style="margin-top: 20px;">
-    <div class="table-responsive">
+    <div class="table-responsive col-lg-6">
         <table class="table table-bordered" id="dynamic_field">
             <tr>
-                <td><b class="form-control symptom0"></b></td>
+                <td style="width:100%;"><b class="form-control symptom0"></b></td>
                 <td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>
                 <td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>
             </tr>
         </table>
     </div>
 </form>
-<div class="table-responsive">
+<div class="table-responsive col-lg-6">
     <table id="symptoms" class="table table-bordered">
         <tr>
-            <th>Possible diseases</th>
+            <th>Diagnosis</th>
         </tr>
     </table>
 </div>
@@ -65,7 +65,6 @@
                     }
                 });
             });
-            var next = '';
             var i = 0;
             $(document).on('click', '.unused', function () {
                 $('.unused').removeClass('unused').addClass('used');
@@ -90,11 +89,10 @@
                     dataType: "json",
                     success: function (data) {
                         $(".symptom").remove();
-                        next = data;
                         if (data.name) {
-                            $('#symptoms').append('<p class="symptom">' + data.name + '</p>');
+                            $('#symptoms').append('<tr><th class="symptom" style="color:Green;">' + data.name + '</th></tr>');
                         } else {
-                            $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '">' + next + '</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
+                            $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '">' + data + '</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
                         }
                     }
                 });

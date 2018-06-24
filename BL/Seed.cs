@@ -1,12 +1,7 @@
-﻿using DAL.App.Interfaces;
-using Domains;
-using MedicalMystery.Models;
+﻿using Domains;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MedicalMystery.BL
 {
@@ -29,8 +24,8 @@ namespace MedicalMystery.BL
                 string[] temp = csvLine.Split(',');
                 diseases.Add(new Disease()
                 {
-                    name = temp[0],
-                    symptoms = allSymptoms(temp)
+                    Name = temp[0],
+                    SymptomString = allSymptoms(temp)
                 });
             };
             return diseases;
