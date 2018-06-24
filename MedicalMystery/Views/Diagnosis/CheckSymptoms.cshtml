@@ -39,7 +39,6 @@
                 $('#row' + button_id + '').remove();
             });
             $('#submit').click(function () {
-
                 var lines = [];
                 $.each($('#add_symptom').serializeArray(), function (i, v) {
                     if (v.value) lines.push(v.value);
@@ -51,12 +50,13 @@
                     data: JSON.stringify(lines),
                     dataType: "json",
                     success: function (data) {
+
                         $(".symptom").remove();
                         $.each(data, function (i, v) {
-                            $('#symptoms').append('<p class="symptom">' + v.name + '</p>');
+                            $('#symptoms').append('<p class="symptom">' + v + '</p>');
                         });
                     }
-                });
+                })
             });
         });
 </script>

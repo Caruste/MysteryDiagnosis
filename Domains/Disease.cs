@@ -16,7 +16,5 @@ namespace Domains
 
         [NonSerialized]
         public List<Symptom> Symptoms;
-        [NonSerialized]
-        public List<string> SymptomString;
     }
 }

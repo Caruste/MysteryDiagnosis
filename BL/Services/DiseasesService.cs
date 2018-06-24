@@ -13,7 +13,6 @@ namespace BL.Services
     {
 
         private readonly IDiseasesRepository _diseasesRepo;
-        private readonly ISymptomsRepository _symptomsRepo;
         private readonly ISymptomService _symptomsService;
         private readonly ISymptomsInDiseaseService _sidService;
 

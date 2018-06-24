@@ -43,14 +43,6 @@ namespace MedicalMystery.Controllers
         [HttpGet("Symptoms")]
         public List<string> topSymptoms()
         {
-#warning This is not finished yet! Must add a way to get frequency of symptoms from ManyToMany table
-
-            //var sortedDictionary = symptomCount
-            //                        .OrderByDescending(x => x.Value)
-            //                        .ThenBy(x => x.Key)
-            //                        .Select(x => x.Key.ToString())
-            //                        .Take(3)
-            //                        .ToList();
             return _symptomService.TopThreeSymptoms().ToList();
         }
 
@@ -58,15 +50,19 @@ namespace MedicalMystery.Controllers
         public IActionResult CheckSymptoms([FromBody] List<string> list)
         {
             if (list.Count == 0) return NotFound();
-            IEnumerable<Disease> diseases = _diseasesRepository.All();
+
+            IEnumerable<Disease> diseases = _diseasesService.AllWithSymptoms();
             List<Disease> final = new List<Disease>();
 
             foreach (Disease item in diseases)
             {
-                if (ContainsAllItems(item.SymptomString, list)) final.Add(item);
+                if (ContainsAllItems(item.Symptoms.Select(x=> x.Name).ToList(), list)) final.Add(item);
             }
-            return Ok(final);
+
+            return Ok(final.Select(x=> x.Name));
         }
+
+        
 
         [HttpPost("Database")]
         public IActionResult CreateDatabase([FromBody] List<string> input)
@@ -84,7 +80,7 @@ namespace MedicalMystery.Controllers
             if (input.positive != null)
             {
                 if (input.positive.Count == 0) hasAll = diseases.ToList();
-                else hasAll = diseases.Where(x => ContainsAllItems(x.SymptomString, input.positive)).ToList();
+                else hasAll = diseases.Where(x => ContainsAllItems(x.Symptoms.Select( s => s.Name).ToList(), input.positive)).ToList();
             }
 
             List<Disease> final = new List<Disease>();
@@ -95,13 +91,20 @@ namespace MedicalMystery.Controllers
                 else
                     // This checks if there are any same symptoms in the disease and input negative. 
                     // Disease can't contain anything form the input.negative as the user has answered no to it!
-                    final = hasAll.Where(x => !x.SymptomString.Intersect(input.negative).Any()).ToList();
+                    final = hasAll.Where(x => !x.Symptoms.Select(s => s.Name).Intersect(input.negative).Any()).ToList();
             }
 
-            var list = final.OrderBy(x => x.SymptomString.Count).ToList();
+            var list = final
+                .OrderBy(x => x.Symptoms.Select(s => s.Name).Count())
+                .ToList();
+
             if (list.Count() <= 1) return Ok(list.FirstOrDefault());
 
-            List<string> symptomList = list.ElementAt(1).SymptomString.Except(list.FirstOrDefault().SymptomString).ToList();
+            List<string> symptomList = list
+                    .ElementAt(1)
+                    .Symptoms.Select(x => x.Name)
+                    .Except(list.FirstOrDefault().Symptoms.Select(s => s.Name))
+                    .ToList();
 
             foreach (var item in symptomList)
             {
