@@ -1,4 +1,5 @@
-﻿using Domains;
+﻿using BL.DTO;
+using Domains;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,5 +11,6 @@ namespace BL.Interfaces
         void AddAll(List<string> list);
 
         List<Disease> AllWithSymptoms();
+        IEnumerable<Disease> All();
     }
 }

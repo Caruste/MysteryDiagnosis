@@ -7,6 +7,15 @@ namespace Domains
 {
     public class Symptom
     {
+        public Symptom()
+        {
+        }
+
+        public Symptom(string name)
+        {
+            Name = name;
+        }
+
         [Key]
         public int SymptomId { get; set; }
 

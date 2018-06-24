@@ -18,12 +18,10 @@ namespace MedicalMystery.Controllers
     [Route("api/Test")]
     public class TestController : Controller
     {
-        private readonly IDiseasesRepository _diseasesRepository;
         private readonly IDiseasesService _diseasesService;
         private readonly ISymptomService _symptomService;
-        public TestController(IDiseasesRepository diseasesRepository, IDiseasesService diseasesService, ISymptomService symptomService)
+        public TestController(IDiseasesService diseasesService, ISymptomService symptomService)
         {
-            _diseasesRepository = diseasesRepository;
             _diseasesService = diseasesService;
             _symptomService = symptomService;
         }
@@ -31,7 +29,7 @@ namespace MedicalMystery.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_diseasesRepository.All());
+            return Ok(_diseasesService.All());
         }
 
         [HttpGet("Amount")]
@@ -41,25 +39,17 @@ namespace MedicalMystery.Controllers
         }
 
         [HttpGet("Symptoms")]
-        public List<string> topSymptoms()
+        public IActionResult topSymptoms()
         {
-            return _symptomService.TopThreeSymptoms().ToList();
+            var response = _symptomService.TopThreeSymptoms();
+            if (response == null) return NotFound();
+            return Ok(response);
         }
 
         [HttpPost]
         public IActionResult CheckSymptoms([FromBody] List<string> list)
         {
-            if (list.Count == 0) return NotFound();
-
-            IEnumerable<Disease> diseases = _diseasesService.AllWithSymptoms();
-            List<Disease> final = new List<Disease>();
-
-            foreach (Disease item in diseases)
-            {
-                if (ContainsAllItems(item.Symptoms.Select(x => x.Name).ToList(), list)) final.Add(item);
-            }
-
-            return Ok(final.Select(x => x.Name));
+            return Ok(_symptomService.CheckSymptoms(list));
         }
 
 
@@ -74,53 +64,10 @@ namespace MedicalMystery.Controllers
         [HttpPost("ForQuestions")]
         public IActionResult GetNextQuestion([FromBody] AnswersDTO input)
         {
-            IEnumerable<Disease> diseases = _diseasesService.AllWithSymptoms();
-            if (diseases == null) return NotFound();
-            List<Disease> hasAll = new List<Disease>();
-
-            if (input.positive != null)
-            {
-                if (input.positive.Count == 0) hasAll = diseases.ToList();
-                else hasAll = diseases.Where(x => ContainsAllItems(x.Symptoms.Select(s => s.Name).ToList(), input.positive)).ToList();
-            }
-
-            List<Disease> final = new List<Disease>();
-
-            if (input.negative != null)
-            {
-                if (input.negative.Count == 0) final = hasAll;
-                else
-                    // This checks if there are any same symptoms in the disease and input negative. 
-                    // Disease can't contain anything form the input.negative as the user has answered no to it!
-                    final = hasAll.Where(x => !x.Symptoms.Select(s => s.Name).Intersect(input.negative).Any()).ToList();
-            }
-
-            var list = final
-                .OrderBy(x => x.Symptoms.Count())
-                .ToList();
-
-            if (list.Count() == 1) return Ok(new
-            {
-                name = list.FirstOrDefault().Name
-            });
-
-            List<string> symptomList = list
-                    .ElementAt(1)
-                    .Symptoms.Select(x => x.Name)
-                    .Except(list.FirstOrDefault().Symptoms.Select(s => s.Name))
-                    .ToList();
-
-            foreach (var item in symptomList)
-            {
-                if (!input.positive.Contains(item) && !input.negative.Contains(item)) return Ok(item);
-            }
-
-            return NotFound();
-        }
-
-        public static bool ContainsAllItems(List<string> a, List<string> b)
-        {
-            return !b.ConvertAll(x => x.ToLower()).Except(a.ConvertAll(x => x.ToLower())).Any();
+            var alpha = _symptomService.GetNextQuestion(input);
+            if (alpha.GetType() == typeof(string)) return Ok(alpha);
+            else if (alpha == null) return NotFound();
+            return Ok(alpha);
         }
     }
 }
