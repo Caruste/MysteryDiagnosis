@@ -11,5 +11,7 @@ namespace BL.Interfaces
         Symptom FindByName(Symptom symptom);
         Symptom FindByName(string name);
         int UniqueSymptomsCount();
+        IEnumerable<Symptom> AllSymptoms();
+        IEnumerable<string> TopThreeSymptoms();
     }
 }

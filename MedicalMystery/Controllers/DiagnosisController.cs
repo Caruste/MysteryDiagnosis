@@ -22,7 +22,12 @@ namespace MedicalMystery.Controllers.api
         {
 #warning Make this method return empty View! 
 
-            return View(_diseasesService.AllWithSymptoms());
+            return View(
+                _diseasesService.AllWithSymptoms()
+                .OrderByDescending(x => x.Symptoms.Count)
+                .ThenBy(x => x.Name)
+                .Take(3)
+                );
 
             //return View(
             //    _dataContext.All()

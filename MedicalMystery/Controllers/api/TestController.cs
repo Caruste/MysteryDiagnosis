@@ -43,25 +43,15 @@ namespace MedicalMystery.Controllers
         [HttpGet("Symptoms")]
         public List<string> topSymptoms()
         {
-            IEnumerable<Disease> diseases = _diseasesRepository.All();
-            Dictionary<string, int> symptomCount = new Dictionary<string, int>();
+#warning This is not finished yet! Must add a way to get frequency of symptoms from ManyToMany table
 
-            foreach (var disease in diseases)
-            {
-                foreach (var symptom in disease.SymptomString)
-                {
-                    if (symptomCount.ContainsKey(symptom)) symptomCount[symptom]++;
-                    else symptomCount.Add(symptom, 0);
-                }
-            }
-
-            var sortedDictionary = symptomCount
-                                    .OrderByDescending(x => x.Value)
-                                    .ThenBy(x => x.Key)
-                                    .Select(x => x.Key.ToString())
-                                    .Take(3)
-                                    .ToList();
-            return sortedDictionary;
+            //var sortedDictionary = symptomCount
+            //                        .OrderByDescending(x => x.Value)
+            //                        .ThenBy(x => x.Key)
+            //                        .Select(x => x.Key.ToString())
+            //                        .Take(3)
+            //                        .ToList();
+            return _symptomService.TopThreeSymptoms().ToList();
         }
 
         [HttpPost]
@@ -81,8 +71,6 @@ namespace MedicalMystery.Controllers
         [HttpPost("Database")]
         public IActionResult CreateDatabase([FromBody] List<string> input)
         {
-            if (!System.IO.File.Exists("database/database.csv")) return NotFound();
-            System.IO.File.WriteAllLines("database/database.csv", input);
             _diseasesService.AddAll(input);
             return Ok();
         }

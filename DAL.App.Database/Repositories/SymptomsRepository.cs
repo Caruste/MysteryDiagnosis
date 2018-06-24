@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DAL.App.Database.Repositories
+namespace DAL.App.EF.Repositories
 {
     public class SymptomsRepository : EFRepository<Symptom>, ISymptomsRepository
     {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DAL.App.Database.Repositories
+namespace DAL.App.EF.Repositories
 {
     public class DiseasesRepository : EFRepository<Disease>, IDiseasesRepository
     {

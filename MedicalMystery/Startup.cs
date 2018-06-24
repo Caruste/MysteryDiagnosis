@@ -1,7 +1,7 @@
 ﻿using BL.Interfaces;
 using BL.Services;
 using DAL.App.Database;
-using DAL.App.Database.Repositories;
+using DAL.App.EF.Repositories;
 using DAL.App.Interfaces;
 using DAL.App.Interfaces.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -30,9 +30,12 @@ namespace MedicalMystery
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<DbContext, MedicalMysteryDbContext>();
+
+
             #region Repositories
             services.AddScoped<IDiseasesRepository, DiseasesRepository>();
             services.AddScoped<ISymptomsRepository, SymptomsRepository>();
+            services.AddScoped<ISymptomsInDiseaseRepository, SymptomsInDiseaseRepository>();
             #endregion
 
 
