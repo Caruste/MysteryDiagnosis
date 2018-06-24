@@ -31,7 +31,7 @@
             var negativeList = [];
             $.ajax({
                 type: "POST",
-                url: "/api/Test/ForQuestions",
+                url: "/api/Symptoms/Question",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({
                     positive: positiveList,
@@ -53,7 +53,7 @@
                 });
                 $.ajax({
                     type: "POST",
-                    url: "/api/Test",
+                    url: "/api/Symptoms",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(lines),
                     dataType: "json",
@@ -80,7 +80,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/api/Test/ForQuestions",
+                    url: "/api/Symptoms/Question",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
                         positive: positiveList,

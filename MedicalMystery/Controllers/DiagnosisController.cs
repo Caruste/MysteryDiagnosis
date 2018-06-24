@@ -28,13 +28,6 @@ namespace MedicalMystery.Controllers.api
                 .ThenBy(x => x.Name)
                 .Take(3)
                 );
-
-            //return View(
-            //    _dataContext.All()
-            //        .OrderByDescending(x => x.SymptomString.Count)
-            //        .ThenBy(x => x.Name)
-            //        .Take(3)
-            //    );
         }
 
         public IActionResult Database()
