@@ -75,6 +75,7 @@ namespace MedicalMystery.Controllers
         public IActionResult GetNextQuestion([FromBody] AnswersDTO input)
         {
             IEnumerable<Disease> diseases = _diseasesService.AllWithSymptoms();
+            if (diseases == null) return NotFound();
             List<Disease> hasAll = new List<Disease>();
 
             if (input.positive != null)

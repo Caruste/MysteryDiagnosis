@@ -42,7 +42,6 @@
                 $.each($('#inputDiseases').val().split(/\n/), function (i, line) {
                     if (line) lines.push(line);
                 });
-                alert(JSON.stringify(lines));
                     $.ajax({
                         type: "POST",
                         url: "/api/Test/Database",
@@ -50,7 +49,7 @@
                         data: JSON.stringify(lines),
                         dataType: "json",
                         success: function (data) {
-                            alert(data)
+                            location.reload();
                         }
                     });
             });
