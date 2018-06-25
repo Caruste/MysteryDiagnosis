@@ -10,8 +10,8 @@ namespace BL.Interfaces
     {
         void AddAll(List<string> list);
 
-        List<Disease> AllWithSymptoms();
-        IEnumerable<Disease> All();
+        IEnumerable<DiseaseDTO> AllWithSymptoms();
+        IEnumerable<DiseaseDTO> TopThreeBySymptomsCount();
         void ClearDiseasesAndSymptomsDBFORTESTING();
     }
 }

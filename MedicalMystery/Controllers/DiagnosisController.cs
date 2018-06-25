@@ -13,26 +13,13 @@ namespace MedicalMystery.Controllers.api
 {
     public class DiagnosisController : Controller
     {
-        private readonly IDiseasesService _diseasesService;
-        public DiagnosisController(IDiseasesService diseasesService)
+        public IActionResult Statistics()
         {
-            _diseasesService = diseasesService;
-        }
-        public IActionResult Index()
-        {
-#warning Make this method return empty View! 
-
-            return View(
-                _diseasesService.AllWithSymptoms()
-                .OrderByDescending(x => x.Symptoms.Count)
-                .ThenBy(x => x.Name)
-                .Take(3)
-                );
+            return View();
         }
 
         public IActionResult Database()
         {
-
             return View();
         }
 

@@ -58,12 +58,7 @@ namespace BL.Services
             }
         }
 
-        public IEnumerable<Disease> All()
-        {
-            return _diseasesRepo.All();
-        }
-
-        public List<Disease> AllWithSymptoms()
+        public IEnumerable<DiseaseDTO> AllWithSymptoms()
         {
 
             /*  First we everything from diseasesRepo which includes SymptomsInDiseases
@@ -75,12 +70,20 @@ namespace BL.Services
             return _diseasesRepo
                         .AllWithSymptoms()
                         .Select(x => { x.Symptoms = x.SymptomsInDiseases.Select(s => s.Symptom).ToList(); return x; })
-                        .ToList();
+                        .Select(s => DiseaseDTO.Transform(s));
         }
 
         public void ClearDiseasesAndSymptomsDBFORTESTING()
         {
             _diseasesRepo.RemoveDiseasesAndSymptoms();
+        }
+
+        public IEnumerable<DiseaseDTO> TopThreeBySymptomsCount()
+        {
+            return AllWithSymptoms()
+                .OrderByDescending(x => x.symptoms.Count)
+                .ThenBy(x => x.name)
+                .Take(3);
         }
     }
 }

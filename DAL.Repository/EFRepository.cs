@@ -42,9 +42,5 @@ namespace DAL.Repository
         {
             repoDbContext.SaveChanges();
         }
-        public async Task SaveChangesAsync()
-        {
-            await repoDbContext.SaveChangesAsync();
-        }
     }
 }

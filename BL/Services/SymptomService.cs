@@ -22,35 +22,19 @@ namespace BL.Services
             _diseasesService = diseasesService;
         }
 
-        public void AddSymptom(Symptom symptom)
-        {
-            _symptomRepo.Add(symptom);
-            _symptomRepo.SaveChanges();
-        }
-
-        public IEnumerable<Symptom> AllSymptoms()
-        {
-            return _symptomRepo.All();
-        }
-
         public IEnumerable<string> CheckSymptoms(List<string> symptoms)
         {
-            IEnumerable<Disease> diseases = _diseasesService.AllWithSymptoms();
+            IEnumerable<DiseaseDTO> diseases = _diseasesService.AllWithSymptoms();
             if (symptoms.Count == 0 || diseases == null) return null;
 
-            List<Disease> final = new List<Disease>();
-            foreach (Disease item in diseases)
+            List<DiseaseDTO> final = new List<DiseaseDTO>();
+            foreach (DiseaseDTO item in diseases)
             {
                 // This method is used to find all the diseases that contain all of the given symptoms
-                if (ContainsAllItems(item.Symptoms.Select(x => x.Name), symptoms)) final.Add(item);
+                if (ContainsAllItems(item.symptoms, symptoms)) final.Add(item);
             }
 
-            return final.Select(x => x.Name);
-        }
-
-        public Symptom FindByName(string name)
-        {
-            return _symptomRepo.FindByName(name);
+            return final.Select(x => x.name);
         }
 
         public IEnumerable<string> TopThreeSymptoms()
@@ -91,9 +75,9 @@ namespace BL.Services
 
         public object GetNextQuestion(AnswersDTO input)
         {
-            IEnumerable<Disease> diseases = _diseasesService.AllWithSymptoms();
+            IEnumerable<DiseaseDTO> diseases = _diseasesService.AllWithSymptoms();
 
-            if (diseases == null || input.positive == null || input.negative == null) return null;
+            if (diseases.Count() == 0 || diseases == null || input.positive == null || input.negative == null) return null;
 
             /*  First .Where statement checks if a given disease contains all of the inputs that the user
             *   has said that he/she has. 
@@ -102,25 +86,24 @@ namespace BL.Services
             *   Intersect gets the common parts of two lists. If there are any then that Disease will be dismissed!
             *   Then we order it by Sympotms count. We want the lower count diseases to be infront for faster searching
              */
-            List<Disease> InputEvaluated = diseases
-                            .Where(x => ContainsAllItems(x.Symptoms.Select(s => s.Name), input.positive))
-                            .Where(x => !x.Symptoms.Select(s => s.Name)
-                            .Intersect(input.negative).Any())
-                            .OrderBy(x => x.Symptoms.Count())
+            List<DiseaseDTO> InputEvaluated = diseases
+                            .Where(x => ContainsAllItems(x.symptoms, input.positive))
+                            .Where(x => !x.symptoms.Intersect(input.negative).Any())
+                            .OrderBy(x => x.symptoms.Count())
                             .ToList();
 
             // This returns an anonymous object back, which is used by front-end to detect final answer.
             if (InputEvaluated.Count() == 1) return (new
             {
-                name = InputEvaluated.FirstOrDefault().Name
+                name = InputEvaluated.FirstOrDefault().name
             });
 
             // Here we take the first and second diseases symptoms, find the differences and output them
             // This is done so that with each question at-least one disease would be eliminated (not always though)
             List<string> symptomList = InputEvaluated
                     .ElementAt(1)
-                    .Symptoms.Select(x => x.Name)
-                    .Except(InputEvaluated.FirstOrDefault().Symptoms.Select(s => s.Name))
+                    .symptoms
+                    .Except(InputEvaluated.FirstOrDefault().symptoms)
                     .ToList();
 
             // Return the next question. This is checked against what has already been asked to make sure we dont ask same question twice.

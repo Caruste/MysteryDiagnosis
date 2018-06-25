@@ -14,20 +14,15 @@ namespace MedicalMystery.Controllers.api
     public class DiseasesController : Controller
     {
         private readonly IDiseasesService _diseasesService;
-        private readonly ISymptomService _symptomService;
-        public DiseasesController(IDiseasesService diseasesService, ISymptomService symptomService)
+        public DiseasesController(IDiseasesService diseasesService)
         {
             _diseasesService = diseasesService;
-            _symptomService = symptomService;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(
-                _diseasesService.AllWithSymptoms()
-                .Select( x => DiseaseDTO.Transform(x))
-                .ToList());
+            return Ok(_diseasesService.AllWithSymptoms());
         }
 
         [HttpPost]
@@ -38,6 +33,11 @@ namespace MedicalMystery.Controllers.api
             return Ok("");
         }
 
+        [HttpGet("TopThree")]
+        public IActionResult Index()
+        {
+            return Ok(_diseasesService.TopThreeBySymptomsCount());
+        }
 
 #warning this method must be deleted if it ever goes live!
         /// <summary>

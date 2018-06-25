@@ -8,10 +8,8 @@ namespace DAL.Interfaces.Interfaces
     public interface IRepository<TEntity> where TEntity : class
     {
         IEnumerable<TEntity> All();
-
         void Add(TEntity entity);
         void SaveChanges();
-        Task SaveChangesAsync();
         void RemoveDiseasesAndSymptoms();
     }
 }

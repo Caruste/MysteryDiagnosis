@@ -15,7 +15,8 @@ namespace DAL.App.EF.Repositories
 
         public List<Disease> AllWithSymptoms()
         {
-            return repoDbSet.Include(x => x.SymptomsInDiseases)
+            return repoDbSet
+                .Include(x => x.SymptomsInDiseases)
                 .ThenInclude(s => s.Symptom)
                 .ToList();
         }

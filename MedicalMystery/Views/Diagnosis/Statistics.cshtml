@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Domains.Disease>
-
-<div class="col-md-8" style="margin-top: 20px">
+﻿<div class="col-md-6" style="margin-top: 20px">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -11,41 +9,28 @@
                 </td>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <th style="text-align:center">Name</th>
-                <th style="text-align:center">Symptoms</th>
-            </tr>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <th>
-                        @item.Name
-                    </th>
+        <tbody id="diseases">
 
-                    <th>
-                        @foreach (var str in item.Symptoms)
-                        {
-                            <p > @str.Name</p>
-                        }
-                    </th>
-                </tr>
-            }
         </tbody>
     </table>
 </div>
 
-<div class="col-md-4" style="margin-top: 20px">
-    <table id="symptoms" class="table table-bordered">
-        <tr>
-            <th>
-                <h4 style="text-align:center">Three most frequent symptoms</h4>
-            </th>
-        </tr>
+<div class="col-md-6" style="margin-top: 20px">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    <h4 style="text-align:center">Three most frequent symptoms</h4>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="symptoms">
+
+        </tbody>
     </table>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-12" style="text-align: center">
     <b>Amount of unique symptoms: </b>
     <span id="symptomAmount"></span>
 </div>
@@ -56,6 +41,8 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            getSymptoms();
+
             $.ajax({
                 type: "GET",
                 url: "/api/Symptoms/Amount",
@@ -75,5 +62,24 @@
                 });
             })
         });
+
+        function getSymptoms() {
+            $.ajax({
+                type: "GET",
+                url: "/api/diseases/topthree",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    var ForAppending = '';
+
+                    $.each(data, function (i, v) {
+                        ForAppending += ('<tr class="disease"><th>' + v.name + '</th></tr>');
+                        $('#diseases').append(ForAppending);
+                        ForAppending = '';
+                    });
+                }
+            });
+        }               
     </script>
 }

@@ -13,20 +13,16 @@ namespace MedicalMystery.Controllers.api
     [Route("api/Symptoms")]
     public class SymptomsController : Controller
     {
-        private readonly IDiseasesService _diseasesService;
         private readonly ISymptomService _symptomService;
-        public SymptomsController(IDiseasesService diseasesService, ISymptomService symptomService)
+        public SymptomsController(ISymptomService symptomService)
         {
-            _diseasesService = diseasesService;
             _symptomService = symptomService;
         }
 
         [HttpGet("Top")]
         public IActionResult topSymptoms()
         {
-            var response = _symptomService.TopThreeSymptoms();
-            if (response == null) return NotFound();
-            return Ok(response);
+            return Ok(_symptomService.TopThreeSymptoms());
         }
 
         [HttpGet("Amount")]
@@ -38,10 +34,7 @@ namespace MedicalMystery.Controllers.api
         [HttpPost("Question")]
         public IActionResult GetNextQuestion([FromBody] AnswersDTO input)
         {
-            var alpha = _symptomService.GetNextQuestion(input);
-            if (alpha.GetType() == typeof(string)) return Ok(alpha);
-            else if (alpha == null) return NotFound();
-            return Ok(alpha);
+            return Ok(_symptomService.GetNextQuestion(input));
         }
 
         [HttpPost]

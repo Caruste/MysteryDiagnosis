@@ -67,7 +67,7 @@ namespace MedicalMystery
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Diagnosis}/{action=Database}/{id?}");
+                    template: "{controller=Diagnosis}/{action=Statistics}/{id?}");
             });
         }
     }

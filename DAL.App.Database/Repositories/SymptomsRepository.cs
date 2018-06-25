@@ -14,10 +14,6 @@ namespace DAL.App.EF.Repositories
         public SymptomsRepository(DbContext dbContext) : base(dbContext)
         {
         }
-        public bool Exists(Symptom symptom)
-        {
-            return repoDbSet.Where(x => x.Name == symptom.Name).Any();
-        }
 
         public Symptom FindByName(string name)
         {

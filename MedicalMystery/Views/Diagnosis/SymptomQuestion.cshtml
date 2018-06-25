@@ -42,10 +42,14 @@
                     $('.symptom0').html(data);
                 }
             });
+
+
             $(document).on('click', '.symptom_remove', function () {
                 var button_id = $(this).attr("id");
                 $('#row' + button_id + '').remove();
             });
+
+
             $('#submit').click(function () {
                 var lines = [];
                 $.each($('#add_symptom').serializeArray(), function (i, v) {
@@ -65,6 +69,8 @@
                     }
                 });
             });
+
+
             var i = 0;
             $(document).on('click', '.unused', function () {
                 $('.unused').removeClass('unused').addClass('used');

@@ -8,10 +8,7 @@ namespace BL.Interfaces
 {
     public interface ISymptomService
     {
-        void AddSymptom(Symptom symptom);
-        Symptom FindByName(string name);
         int UniqueSymptomsCount();
-        IEnumerable<Symptom> AllSymptoms();
         IEnumerable<string> TopThreeSymptoms();
         IEnumerable<string> CheckSymptoms(List<string> symptoms);
         object GetNextQuestion(AnswersDTO input);
