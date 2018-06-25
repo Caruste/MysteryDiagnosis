@@ -9,6 +9,6 @@ namespace DAL.App.Interfaces.Interfaces
     public interface IDiseasesRepository: IRepository<Disease>
     {
         bool Exists(Disease disease);
-        List<Disease> AllWithSymptoms();
+        IEnumerable<Disease> AllWithSymptoms();
     }
 }

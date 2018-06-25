@@ -44,9 +44,9 @@ namespace BL
         /// </summary>
         /// <param name="list">List which we are trimming</param>
         /// <returns>List<string> which contains trimmed strings and is ready to be assigned as symptoms</returns>
-        private static List<string> allSymptoms(string[] list)
+        private static IEnumerable<string> allSymptoms(string[] list)
         {
-            return list.Skip(1).Select(x => x.Trim()).ToList();
+            return list.Skip(1).Select(x => x.Trim());
         }
     }
 }

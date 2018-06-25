@@ -13,12 +13,11 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public List<Disease> AllWithSymptoms()
+        public IEnumerable<Disease> AllWithSymptoms()
         {
             return repoDbSet
                 .Include(x => x.SymptomsInDiseases)
-                .ThenInclude(s => s.Symptom)
-                .ToList();
+                .ThenInclude(s => s.Symptom);
         }
 
         public bool Exists(Disease disease)

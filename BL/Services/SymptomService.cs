@@ -27,14 +27,9 @@ namespace BL.Services
             IEnumerable<DiseaseDTO> diseases = _diseasesService.AllWithSymptoms();
             if (symptoms.Count == 0 || diseases == null) return null;
 
-            List<DiseaseDTO> final = new List<DiseaseDTO>();
-            foreach (DiseaseDTO item in diseases)
-            {
-                // This method is used to find all the diseases that contain all of the given symptoms
-                if (ContainsAllItems(item.symptoms, symptoms)) final.Add(item);
-            }
-
-            return final.Select(x => x.name);
+            return diseases
+                .Where(x => ContainsAllItems(x.symptoms, symptoms))
+                .Select(x => x.name);
         }
 
         public IEnumerable<string> TopThreeSymptoms()
@@ -86,25 +81,23 @@ namespace BL.Services
             *   Intersect gets the common parts of two lists. If there are any then that Disease will be dismissed!
             *   Then we order it by Sympotms count. We want the lower count diseases to be infront for faster searching
              */
-            List<DiseaseDTO> InputEvaluated = diseases
+            IEnumerable<DiseaseDTO> InputEvaluated = diseases
                             .Where(x => ContainsAllItems(x.symptoms, input.positive))
                             .Where(x => !x.symptoms.Intersect(input.negative).Any())
-                            .OrderBy(x => x.symptoms.Count())
-                            .ToList();
+                            .OrderBy(x => x.symptoms.Count());
 
             // This returns an anonymous object back, which is used by front-end to detect final answer.
             if (InputEvaluated.Count() == 1) return (new
             {
-                name = InputEvaluated.FirstOrDefault().name
+                InputEvaluated.FirstOrDefault().name
             });
 
             // Here we take the first and second diseases symptoms, find the differences and output them
             // This is done so that with each question at-least one disease would be eliminated (not always though)
-            List<string> symptomList = InputEvaluated
+            IEnumerable<string> symptomList = InputEvaluated
                     .ElementAt(1)
                     .symptoms
-                    .Except(InputEvaluated.FirstOrDefault().symptoms)
-                    .ToList();
+                    .Except(InputEvaluated.FirstOrDefault().symptoms);
 
             // Return the next question. This is checked against what has already been asked to make sure we dont ask same question twice.
             foreach (var item in symptomList) if (!input.positive.Contains(item) && !input.negative.Contains(item)) return item;

@@ -5,10 +5,8 @@
 <form name="add_symptom" id="add_symptom" style="margin-top: 20px;">
     <div class="table-responsive col-lg-6">
         <table class="table table-bordered" id="dynamic_field">
-            <tr>
+            <tr id="first-question">
                 <td style="width:100%;"><b class="form-control symptom0"></b></td>
-                <td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>
-                <td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>
             </tr>
         </table>
     </div>
@@ -40,6 +38,11 @@
                 dataType: "json",
                 success: function (data) {
                     $('.symptom0').html(data);
+                    if (data != '') {
+                        $('#first-question').append('<td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>');
+                        $('#first-question').append('<td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>');
+
+                    }
                 }
             });
 

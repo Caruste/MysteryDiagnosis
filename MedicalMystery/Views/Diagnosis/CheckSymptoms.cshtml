@@ -2,21 +2,23 @@
     Reference:  https://www.webslesson.info/2016/02/dynamically-add-remove-input-fields-in-php-with-jquery-ajax.html
 *@
 
-<form name="add_symptom" id="add_symptom" style="margin-top: 20px; margin-bottom: 25px;">
+<form name="add_symptom" class="col-lg-8" id="add_symptom" style="margin-top: 20px; margin-bottom: 25px;">
     <div class="table-responsive">
         <table class="table table-bordered" id="dynamic_field">
             <tr>
-                <td><input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list" /></td>
+                <td style="width:100%;"><input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list"/></td>
                 <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>
             </tr>
         </table>
-        <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
+        <div style="text-align:right; margin-right: 25px">
+            <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
+        </div>
     </div>
 </form>
-<div class="table-responsive">
+<div class="table-responsive col-lg-4" style="margin-top: 20px;">
     <table id="symptoms" class="table table-bordered">
         <tr>
-            <th>Possible diseases</th>
+            <th style="text-align:center"><p style="font-weight:bold; font-size:x-large">Possible diseases</p></th>
         </tr>
     </table>
 </div>
@@ -49,7 +51,7 @@
 
                         $(".symptom").remove();
                         $.each(data, function (i, v) {
-                            $('#symptoms').append('<p class="symptom">' + v + '</p>');
+                            $('#symptoms').append('<tr><th class="symptom">' + v + '</th></tr>');
                         });
                     }
                 })

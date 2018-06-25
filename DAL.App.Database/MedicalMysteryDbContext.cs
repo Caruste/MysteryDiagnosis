@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DAL.App.Database
 {
-    public class MedicalMysteryDbContext : DbContext, IDataContext
+    public class MedicalMysteryDbContext : DbContext
     {
         public MedicalMysteryDbContext(DbContextOptions<MedicalMysteryDbContext> options)
             : base(options)

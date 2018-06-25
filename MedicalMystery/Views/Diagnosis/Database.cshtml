@@ -1,22 +1,36 @@
-﻿<div style="margin-top: 20px">
-    <b>Input the database here</b>
-    <p></p>
-    <textarea id="inputDiseases"></textarea>
-    <p></p>
-    <input type="button" name="submit" id="submit" class="btn btn-success" value="Submit" />
-    <input type="button" name="clear" id="clear" class="btn btn-danger" value="Clear database" />
+﻿<div class="col-lg-8" style="margin-top: 20px">
+    <table class="table table-bordered" id="database_area">
+        <thead>
+            <tr>
+                <th><h2 style="text-align:center;">Disease</h2></th>
+                <th><h2 style="text-align:center;">Symptoms</h2></th>
+            </tr>
+        </thead>
+        <tbody id="database"></tbody>
+    </table>
 </div>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th><h2>Disease</h2></th>
-            <th><h2>Symptoms</h2></th>
-        </tr>
-    </thead>
-    <tbody id="database">
 
-    </tbody>
-</table>
+
+<div style="margin-top: 20px" class="col-lg-4">
+    <table class="table table-bordered" id="text_area">
+        <tr>
+            <th>
+                <h2 style="text-align:center;">Input the database here</h2>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align:center">
+                <textarea id="inputDiseases" style="resize:none"></textarea>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <input type="button" name="submit" id="submit" class="btn btn-success" value="Submit" />
+                <input type="button" name="clear" id="clear" class="btn btn-danger" value="Clear database" />
+            </th>
+        </tr>
+    </table>
+</div>
 
 @section Scripts {
     <script>
@@ -58,8 +72,10 @@
         });
 
         function changeTextArea() {
-            $('#inputDiseases').css("width", $(window).width() / 3);
-            $('#inputDiseases').css("height", $(window).width() / 6);
+            var boxWidth = $('#database_area').width() / 2;
+            if ($('#database_area').width() == $('#text_area').width()) boxWidth = $('#database_area').width();
+            $('#inputDiseases').css("width", boxWidth/1.1);
+            $('#inputDiseases').css("height", boxWidth/2);
         }
         
         function getDatabase() {
