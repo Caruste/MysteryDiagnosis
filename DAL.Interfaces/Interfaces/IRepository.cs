@@ -12,5 +12,6 @@ namespace DAL.Interfaces.Interfaces
         void Add(TEntity entity);
         void SaveChanges();
         Task SaveChangesAsync();
+        void RemoveDiseasesAndSymptoms();
     }
 }

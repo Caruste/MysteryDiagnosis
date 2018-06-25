@@ -12,5 +12,6 @@ namespace BL.Interfaces
 
         List<Disease> AllWithSymptoms();
         IEnumerable<Disease> All();
+        void ClearDiseasesAndSymptomsDBFORTESTING();
     }
 }

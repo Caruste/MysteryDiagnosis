@@ -32,6 +32,12 @@ namespace DAL.Repository
             return repoDbSet.ToList();
         }
 
+        public void RemoveDiseasesAndSymptoms()
+        {
+            repoDbContext.Database.ExecuteSqlCommand("DELETE FROM Symptoms");
+            repoDbContext.Database.ExecuteSqlCommand("DELETE FROM Diseases");
+        }
+
         public void SaveChanges()
         {
             repoDbContext.SaveChanges();

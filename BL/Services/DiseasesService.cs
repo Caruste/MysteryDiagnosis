@@ -77,5 +77,10 @@ namespace BL.Services
                         .Select(x => { x.Symptoms = x.SymptomsInDiseases.Select(s => s.Symptom).ToList(); return x; })
                         .ToList();
         }
+
+        public void ClearDiseasesAndSymptomsDBFORTESTING()
+        {
+            _diseasesRepo.RemoveDiseasesAndSymptoms();
+        }
     }
 }

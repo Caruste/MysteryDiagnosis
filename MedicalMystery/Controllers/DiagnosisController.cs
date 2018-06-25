@@ -32,9 +32,8 @@ namespace MedicalMystery.Controllers.api
 
         public IActionResult Database()
         {
-#warning Make this method return empty View! 
 
-            return View(_diseasesService.AllWithSymptoms());
+            return View();
         }
 
         public IActionResult CheckSymptoms()

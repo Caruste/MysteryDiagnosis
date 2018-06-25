@@ -6,6 +6,7 @@
     <textarea id="inputDiseases"></textarea>
     <p></p>
     <input type="button" name="submit" id="submit" class="btn btn-info" value="Submit" />
+    <input type="button" name="clear" id="clear" class="btn btn-danger" value="Clear database" />
 </div>
 <table class="table">
     <thead>
@@ -13,46 +14,83 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="database">
         <tr>
             <th><h2>Name</h2></th>
             <th><h2>Symptoms</h2></th>
         </tr>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <th>@item.Name</th>
-                <th>
-                    @foreach (var str in item.Symptoms)
-                    {
-                        <p>@str.Name</p>
-                    }
-                </th>
-            </tr>
-        }
     </tbody>
 </table>
-
 
 @section Scripts {
     <script>
         $(document).ready(function () {
+
+            getDatabase();
+
+            changeTextArea();
+
+            window.addEventListener('resize', function () {
+                changeTextArea();
+            });
+
             $('#submit').click(function () {
                 var lines = [];
                 $.each($('#inputDiseases').val().split(/\n/), function (i, line) {
                     if (line) lines.push(line);
                 });
-                    $.ajax({
-                        type: "POST",
-                        url: "/api/Diseases",
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify(lines),
-                        dataType: "json",
-                        success: function (data) {
-                            location.reload();
-                        }
-                    });
+                $.ajax({
+                    type: "POST",
+                    url: "/api/Diseases",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(lines),
+                    dataType: "json",
+                    success: function (data) {
+                        location.reload(true);
+                    }
+                });
             });
+            $('#clear').click(function () {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/api/Diseases",
+                    success: function (data) {
+                        location.reload(true);
+                    }
+                });
+            }); 
         });
+
+        function changeTextArea() {
+            $('#inputDiseases').css("width", $(window).width() / 3);
+            $('#inputDiseases').css("height", $(window).width() / 6);
+        }
+        
+        function getDatabase() {
+            $.ajax({
+                type: "GET",
+                url: "/api/Diseases",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    $("#disease").remove();
+                    var ForAppending = '';
+
+                    $.each(data, function (i, v) {
+                        ForAppending += ('<tr class="disease"><th>' + v.name + '</th>')
+                        ForAppending += ('<th>');
+
+                        $.each(v.symptoms, function (i, s) {
+                            ForAppending += ('<p>' + s + '</p>');
+                        });
+
+                        ForAppending += ('</th></tr>');
+                        $('#database').append(ForAppending);
+                        ForAppending = '';
+                    });
+                }
+            });
+        }
     </script>
 }
