@@ -6,8 +6,12 @@ using System.Text;
 
 namespace DAL.App.Interfaces.Interfaces
 {
+    /// <summary>
+    /// This interface is used to tell SymptomsInDiseaseRepository which methods should be used.
+    /// It is also used for dependency injection.
+    /// </summary>
     public interface ISymptomsInDiseaseRepository : IRepository<SymptomsInDiseases>
     {
-        IEnumerable<SymptomsInDiseases> AllSymptomIds();
+        IEnumerable<SymptomsInDiseases> AllReferencesToSymptoms();
     }
 }

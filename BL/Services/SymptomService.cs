@@ -50,7 +50,7 @@ namespace BL.Services
         public IEnumerable<string> TopThreeSymptoms()
         {
 
-            IEnumerable<SymptomsInDiseases> symptomsInDiseases = _sidRepository.AllSymptomIds();
+            IEnumerable<SymptomsInDiseases> symptomsInDiseases = _sidRepository.AllReferencesToSymptoms();
             if (symptomsInDiseases == null) return null;
 
             // This dictionary will be used to count the symptoms frequency.
@@ -135,7 +135,7 @@ namespace BL.Services
         /// </summary>
         /// <param name="a">List which we want to make sure that has everything from list b</param>
         /// <param name="b">List which we want want to compare list a against</param>
-        /// <returns>boolean value, wether or not the List a contains everything from b</returns>
+        /// <returns>boolean value, whether or not the List a contains everything from b</returns>
         public static bool ContainsAllItems(IEnumerable<string> a, IEnumerable<string> b)
         {
             /*  First converting everything to lowercase to avoid false negative

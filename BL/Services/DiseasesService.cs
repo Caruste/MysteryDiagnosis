@@ -30,7 +30,7 @@ namespace BL.Services
 
         /// <summary>
         /// This method is used to add several Diseases and Symptoms to the database at once.
-        /// Input form must be following: <DiseaseName>, <Symptom1>, <Symptom2>, ...
+        /// Input form must be following: DiseaseName, Symptom1, Symptom2 ...
         /// </summary>
         /// <param name="list">List of strings which contain Diseases and symptoms</param>
         public void AddAll(List<string> list)

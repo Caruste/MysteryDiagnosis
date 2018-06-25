@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalMystery.Controllers.api
 {
+
+    /// <summary>
+    /// This controller is used to return anything diseases related
+    /// To access is you must use .../api/diseases/{method}
+    /// </summary>
     [Produces("application/json")]
     [Route("api/Diseases")]
     public class DiseasesController : Controller
@@ -19,12 +24,23 @@ namespace MedicalMystery.Controllers.api
             _diseasesService = diseasesService;
         }
 
+        /// <summary>
+        /// This is used to get all of the Diseases with symptoms
+        /// </summary>
+        /// <returns>IEnumerable of DiseaseDTO's which have symptoms included</returns>
         [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(_diseasesService.AllWithSymptoms());
         }
 
+        /// <summary>
+        /// This method is used to add several Diseases and symptoms to the database
+        /// Input form must be following: DiseaseName, Symptom1, Symptom2, ...
+        /// </summary>
+        /// <param name="input">List of strings which we wish to add to the database. </param>
+        /// <returns>StatusCode with an empty string. 
+        ///         This is so Ajax would recognize that it should continue with success</returns>
         [HttpPost]
         public IActionResult AddToDatabase([FromBody] List<string> input)
         {
@@ -33,6 +49,11 @@ namespace MedicalMystery.Controllers.api
             return Ok("");
         }
 
+        /// <summary>
+        /// This method is used to get top three Diseases by their symptom count. 
+        /// They are ordered by symptom count and then by their name alphabetically.
+        /// </summary>
+        /// <returns>IEnumerable of top three diseases bysymptoms count </returns>
         [HttpGet("TopThree")]
         public IActionResult Index()
         {
