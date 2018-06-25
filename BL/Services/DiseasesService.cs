@@ -10,6 +10,10 @@ using System.Text.RegularExpressions;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// This class is used to get information from the database,
+    /// transform it and present it to the front end. 
+    /// </summary>
     public class DiseasesService : IDiseasesService
     {
 
@@ -24,6 +28,11 @@ namespace BL.Services
             _sidService = symptomsInDiseaseService;
         }
 
+        /// <summary>
+        /// This method is used to add several Diseases and Symptoms to the database at once.
+        /// Input form must be following: <DiseaseName>, <Symptom1>, <Symptom2>, ...
+        /// </summary>
+        /// <param name="list">List of strings which contain Diseases and symptoms</param>
         public void AddAll(List<string> list)
         {
             IEnumerable<Disease> diseases = list
@@ -47,6 +56,9 @@ namespace BL.Services
                 if (_diseasesRepo.Exists(disease)) continue;
                 foreach (Symptom symptom in disease.Symptoms)
                 {
+
+                    // Here we attempt to find the symptom from the repository
+                    // If we don't find it then we will add it.
                     Symptom temp = _symptomsRepository.FindByName(symptom.Name);
                     if (temp == null)
                     {
@@ -61,6 +73,12 @@ namespace BL.Services
             }
         }
 
+        /// <summary>
+        /// This method is used to get all Diseases with symptoms.
+        /// SymptomsInDiseases are already included from the database
+        /// but here we will also will the symptoms list itself. 
+        /// </summary>
+        /// <returns>IEnumerable of diseases with symptoms list filled</returns>
         public IEnumerable<DiseaseDTO> AllWithSymptoms()
         {
 
@@ -76,11 +94,20 @@ namespace BL.Services
                         .Select(s => DiseaseDTO.Transform(s));
         }
 
+        /// <summary>
+        /// This method is only for test purposes! 
+        /// It clears the Diseases and Symptoms table content from the database!
+        /// </summary>
         public void ClearDiseasesAndSymptomsDBFORTESTING()
         {
             _diseasesRepo.RemoveDiseasesAndSymptoms();
         }
 
+        /// <summary>
+        /// This method returns three Diseases, which have most symptoms
+        /// Diseases are ordered by symptoms count and then Disease name
+        /// </summary>
+        /// <returns>IEnumerable of diseases, which are ordered</returns>
         public IEnumerable<DiseaseDTO> TopThreeBySymptomsCount()
         {
             return AllWithSymptoms()

@@ -6,6 +6,10 @@ using System.Text;
 
 namespace BL.Interfaces
 {
+    /// <summary>
+    /// This interface is used for dependency injection and to say
+    /// which methods should SymptomService fulfill
+    /// </summary>
     public interface ISymptomService
     {
         int UniqueSymptomsCount();

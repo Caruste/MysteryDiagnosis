@@ -6,6 +6,10 @@ using System.Text;
 
 namespace BL.DTO
 {
+    /// <summary>
+    /// This class is used to transfer Diseases from backend to frontend.
+    /// This reduces the amount of information sent and lists symptoms as strings
+    /// </summary>
     public class DiseaseDTO
     {
         public string name;

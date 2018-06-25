@@ -6,6 +6,11 @@ using System.Text;
 
 namespace BL.Interfaces
 {
+
+    /// <summary>
+    /// This interface is used for dependency injection and to say
+    /// which methods should DiseasesService fulfill
+    /// </summary>
     public interface IDiseasesService
     {
         void AddAll(List<string> list);

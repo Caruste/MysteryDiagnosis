@@ -9,6 +9,10 @@ using System.Text;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// This class is used to get information from the database,
+    /// transform it and present it to the front end. 
+    /// </summary>
     public class SymptomService : ISymptomService
     {
         private readonly ISymptomsRepository _symptomRepo;
@@ -22,6 +26,13 @@ namespace BL.Services
             _diseasesService = diseasesService;
         }
 
+        /// <summary>
+        /// This method checks the symptoms against the symptoms that diseases have
+        /// If a disease has all of the symptoms given as input then it returns that Disease and
+        /// any other that also has given requirements
+        /// </summary>
+        /// <param name="symptoms">List of symptoms that we want to check</param>
+        /// <returns>IEnumerable of strings that contains diseases names that match the symptoms</returns>
         public IEnumerable<string> CheckSymptoms(List<string> symptoms)
         {
             IEnumerable<DiseaseDTO> diseases = _diseasesService.AllWithSymptoms();
@@ -32,6 +43,10 @@ namespace BL.Services
                 .Select(x => x.name);
         }
 
+        /// <summary>
+        /// This method returns top three symptoms from the database by their frequency in diseases.
+        /// </summary>
+        /// <returns>IEnumerable of symptoms that are most frequent in diseases</returns>
         public IEnumerable<string> TopThreeSymptoms()
         {
 
@@ -62,11 +77,22 @@ namespace BL.Services
                         .Take(3);
         }
 
+        /// <summary>
+        /// This method simply returns the amount of symptoms in the database
+        /// as they are all unique
+        /// </summary>
+        /// <returns>amount of symptoms in the database as integer</returns>
         public int UniqueSymptomsCount()
         {
             return _symptomRepo.SymptomsCount();
         }
 
+        /// <summary>
+        /// This method is used to get the next question for the frontend. 
+        /// </summary>
+        /// <param name="input">Answers by the users that contain which symptoms they have and which they don't have.</param>
+        /// <returns>Object, which is either a string or a disease.
+        ///             A Disease is returned if only 1 Disease if left after evaluating input.</returns>
         public object GetNextQuestion(AnswersDTO input)
         {
             IEnumerable<DiseaseDTO> diseases = _diseasesService.AllWithSymptoms();
@@ -104,6 +130,12 @@ namespace BL.Services
             return null;
         }
 
+        /// <summary>
+        /// This method is used to check if one list contains everything from another list.
+        /// </summary>
+        /// <param name="a">List which we want to make sure that has everything from list b</param>
+        /// <param name="b">List which we want want to compare list a against</param>
+        /// <returns>boolean value, wether or not the List a contains everything from b</returns>
         public static bool ContainsAllItems(IEnumerable<string> a, IEnumerable<string> b)
         {
             /*  First converting everything to lowercase to avoid false negative
