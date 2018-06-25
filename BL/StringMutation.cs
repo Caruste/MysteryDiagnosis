@@ -33,6 +33,7 @@ namespace BL
                 // Then it selects all the elements and creates a symptom from each one of them.
                 Symptoms = allSymptoms(strings)
                                 .Select(x => new Symptom(x))
+                                .Where(x => x.Name.Length > 1)
                                 .ToList()
             };
         }

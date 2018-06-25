@@ -59,8 +59,7 @@ namespace BL.Services
                         .OrderByDescending(x => x.Value)
                         .ThenBy(x => x.Key)
                         .Select(x => x.Key.ToString())
-                        .Take(3)
-                        .ToList();
+                        .Take(3);
         }
 
         public int UniqueSymptomsCount()

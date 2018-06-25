@@ -26,7 +26,10 @@ namespace BL.Services
 
         public void AddAll(List<string> list)
         {
-            List<Disease> diseases = list.Select(x => StringMutation.DiseaseFromString(x)).ToList();
+            IEnumerable<Disease> diseases = list
+                            .Select(x => StringMutation.DiseaseFromString(x))
+                            .Where(x => x.Symptoms.Count != 0)
+                            .Where(x => x.Name != "");
 
             /*  Looping through the diseases to add them all into the database.
              * 
