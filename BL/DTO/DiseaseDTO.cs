@@ -15,6 +15,12 @@ namespace BL.DTO
         public string name;
         public List<string> symptoms;
 
+
+        /// <summary>
+        /// This method transforms a Disease object to DiseaseDTO object
+        /// </summary>
+        /// <param name="disease">Disease which we wish to transform</param>
+        /// <returns>DiseaseDTO which was transformed from Disease object</returns>
         public static DiseaseDTO Transform(Disease disease)
         {
             return new DiseaseDTO()

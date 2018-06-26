@@ -15,16 +15,28 @@ using System.IO;
 
 namespace MedicalMystery
 {
+    /// <summary>
+    /// Class which assigns options
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Here we assign the configuration
+        /// </summary>
+        /// <param name="configuration">Configuration which is used for the webpage</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Configuration of the application
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddScoped<IDataContext, MedicalMysteryDbContext>();
@@ -62,7 +74,11 @@ namespace MedicalMystery
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 

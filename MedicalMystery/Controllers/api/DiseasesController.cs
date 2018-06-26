@@ -19,6 +19,11 @@ namespace MedicalMystery.Controllers.api
     public class DiseasesController : Controller
     {
         private readonly IDiseasesService _diseasesService;
+
+        /// <summary>
+        /// Constructor to initiate IDiseasesService which is used to get data for the API
+        /// </summary>
+        /// <param name="diseasesService">DiseaseService, which comes from Dependency Injection</param>
         public DiseasesController(IDiseasesService diseasesService)
         {
             _diseasesService = diseasesService;

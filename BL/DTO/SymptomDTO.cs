@@ -14,6 +14,12 @@ namespace BL.DTO
     {
         public string name;
 
+
+        /// <summary>
+        /// This method is used to transform a Symptom object to SymptomDTO object
+        /// </summary>
+        /// <param name="symptom">Symptom which we wish to transform</param>
+        /// <returns>SymptomDTO which was transformed from input</returns>
         public static SymptomDTO Transform(Symptom symptom)
         {
             return new SymptomDTO()
