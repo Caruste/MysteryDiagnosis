@@ -12,10 +12,10 @@
     </div>
 </form>
 <div class="table-responsive col-lg-6">
-    <table id="symptoms" class="table table-bordered">
+    <table id="diagnosis" class="table table-bordered">
         <tr>
             <th style="text-align:center">
-                <h5 style="font-weight:bold; font-size:x-large">Diagnosis</h5> 
+                <h5 style="font-weight:bold; font-size:x-large">Diagnosis</h5>
             </th>
         </tr>
     </table>
@@ -27,68 +27,68 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            // Two lists are created which hold the user responses. 
+            // If the users presses Yes button behind the symptoms name then 
+            //      the symptom will be added to positiveList
+            // If the user presses No button behind the symptoms name then 
+            //      the symptom will be added to negativeList
             var positiveList = [];
             var negativeList = [];
+
+            // When the document is ready we make an initial request
+            //  for the first question we should ask.
             $.ajax({
                 type: "POST",
                 url: "/api/Symptoms/Question",
                 contentType: "application/json; charset=utf-8",
+                // We put the data to JSON form
                 data: JSON.stringify({
                     positive: positiveList,
                     negative: negativeList
                 }),
-                dataType: "json",
-                success: function (data) {
-                    $('.symptom0').html(data);
-                    if (data != '') {
-                        $('#first-question').append('<td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>');
-                        $('#first-question').append('<td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>');
+                dataType: "json"
+            }).success(function (data) {
+                // Upon success the first row will get its input value
+                $('.symptom0').html(data);
 
-                    }
+                // If the data is empty then we will not add any buttons to the page
+                // This is to avoid any clitches for when there wasn't a proper response.
+                // Usually happens when the database is empty.
+                if (data != '') {
+                    $('#first-question').append('<td><button type="button" name="yes" id="yes" class="btn btn-success unused yes">Yes</button></td>');
+                    $('#first-question').append('<td><button type="button" name="no" id="no" class="btn btn-danger unused no">No</button></td>');
+
                 }
             });
 
-
-            $(document).on('click', '.symptom_remove', function () {
-                var button_id = $(this).attr("id");
-                $('#row' + button_id + '').remove();
-            });
-
-
-            $('#submit').click(function () {
-                var lines = [];
-                $.each($('#add_symptom').serializeArray(), function (i, v) {
-                    if (v.value) lines.push(v.value);
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "/api/Symptoms",
-                    contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(lines),
-                    dataType: "json",
-                    success: function (data) {
-                        $(".symptom").remove();
-                        $.each(data, function (i, v) {
-                            $('#symptoms').append('<p class="symptom">' + v + '</p>');
-                        });
-                    }
-                });
-            });
-
-
+            // This var is used to make every row have a unique ID
             var i = 0;
+
+            // When clicking a yes/no button which has unused class, this will be triggered
+            // Unused class is used so that previous buttons couldn't trigger this function
             $(document).on('click', '.unused', function () {
+                // First we remove unused class and append used class
+                // This is done so we can't use click function on this class again
                 $('.unused').removeClass('unused').addClass('used');
+
+                // If the button text is yes, then we will push the symptom name to the positiveList
+                // We will also change the symptoms name background-color to GreenYellow
                 if ((this).innerHTML == "Yes") {
                     positiveList.push($('.symptom' + i).html());
                     $('.symptom' + i).css("background-color", "GreenYellow");
                 }
+
+                // If the button text is no, then we will push the symptom name to the negativeList
+                // We will also change the symptoms name background-color to orange
                 if ((this).innerHTML == "No") {
                     negativeList.push($('.symptom' + i).html());
                     $('.symptom' + i).css("background-color", "orange");
                 }
+                // Here we will add 1 to the var
                 i++;
 
+                // After adding the symptom to a list we will make a Post request to the api
+                // In return we expect the next symptom to ask
                 $.ajax({
                     type: "POST",
                     url: "/api/Symptoms/Question",
@@ -97,14 +97,18 @@
                         positive: positiveList,
                         negative: negativeList
                     }),
-                    dataType: "json",
-                    success: function (data) {
-                        $(".symptom").remove();
-                        if (data.name) {
-                            $('#symptoms').append('<tr><th class="symptom" style="color:Green;">' + data.name + '</th></tr>');
-                        } else {
-                            $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '">' + data + '</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
-                        }
+                    dataType: "json"
+                }).success(function (data) {
+
+                    // If the resmonse has a propert called name then what we got back is the diagnosis
+                    // So we will append to the diagnosis to diagnosis table
+
+                    // Otherwise the response is a string and we will use this to add another row for a question.
+                    // This way we don't add another question row if what we got back was a diagnosis
+                    if (data.name) {
+                        $('#diagnosis').append('<tr><th class="symptom" style="color:Green;">' + data.name + '</th></tr>');
+                    } else {
+                        $('#dynamic_field').append('<tr><td><b class="form-control symptom' + i + '">' + data + '</b></td><td><button type="button" name="yes" id="yes" class="btn btn-success unused">Yes</button></td><td><button type="button" name="no" id="no" class="btn btn-danger unused">No</button></td></tr>');
                     }
                 });
             });

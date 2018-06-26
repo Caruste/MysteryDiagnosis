@@ -9,9 +9,7 @@
                 </td>
             </tr>
         </thead>
-        <tbody id="diseases">
-
-        </tbody>
+        <tbody id="diseases"></tbody>
     </table>
 </div>
 
@@ -24,9 +22,7 @@
                 </th>
             </tr>
         </thead>
-        <tbody id="symptoms">
-
-        </tbody>
+        <tbody id="symptoms"></tbody>
     </table>
 </div>
 
@@ -41,45 +37,45 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            getSymptoms();
 
+            // When the page is ready everything here will be loaded in.
+
+            // This function gets top three symptoms from the api and then appends them
+            // to the diseases <tbody>
             $.ajax({
                 type: "GET",
-                url: "/api/Symptoms/Amount",
-                contentType: "application-json; charset=utf-8",
-                dataType: "json"
-            }).success(function (data) {
-                document.getElementById("symptomAmount").innerHTML = data;
-            })
-            $.ajax({
-                type: "GET",
-                url: "/api/Symptoms/Top",
-                contentType: "application-json; charset=utf-8",
-                dataType: "json"
+                url: "/api/diseases/topthree"
             }).success(function (data) {
                 $.each(data, function (i, v) {
+                    // Diseases are appended to the diseases table
+                    $('#diseases').append('<tr class="disease"><th>' + v.name + '</th></tr>');
+                });
+            })
+
+
+            // After getting the symptoms - unique symptoms amount is requested from
+            //  /api/symptoms/amount.
+            $.ajax({
+                type: "GET",
+                url: "/api/Symptoms/Amount"
+            }).success(function (data) {
+                // Upon successful request the amount is placed into symptomamount span
+                document.getElementById("symptomAmount").innerHTML = data;
+            });
+
+
+            // This method gets the top three symptoms from the api and appends it to
+            //  the symptoms <tbody>
+            $.ajax({
+                type: "GET",
+                url: "/api/Symptoms/Top"
+            }).success(function (data) {
+                $.each(data, function (i, v) {
+                    // For each symptom that we recieve we create a new row and append it to 
+                    // the symptoms <tbody>
                     $('#symptoms').append('<tr class="symptom"><th>' + v + '</th></tr>');
                 });
             })
         });
-
-        function getSymptoms() {
-            $.ajax({
-                type: "GET",
-                url: "/api/diseases/topthree",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-
-                    var ForAppending = '';
-
-                    $.each(data, function (i, v) {
-                        ForAppending += ('<tr class="disease"><th>' + v.name + '</th></tr>');
-                        $('#diseases').append(ForAppending);
-                        ForAppending = '';
-                    });
-                }
-            });
-        }               
     </script>
 }

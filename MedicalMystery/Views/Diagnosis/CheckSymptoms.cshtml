@@ -6,8 +6,12 @@
     <div class="table-responsive">
         <table class="table table-bordered" id="dynamic_field">
             <tr>
-                <td style="width:100%;"><input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list"/></td>
-                <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>
+                <td style="width:100%;">
+                    <input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list" />
+                </td>
+                <td>
+                    <button type="button" name="add" id="add" class="btn btn-success">Add More</button>
+                </td>
             </tr>
         </table>
         <div style="text-align:right; margin-right: 25px">
@@ -25,37 +29,56 @@
 
 
 @section Scripts {
-<script>
+    <script>
         $(document).ready(function () {
-            var i = 1;
+            // This var is used to add a unique ID to each row which we added to get another input
+            var i = 0;
+
+            // Upon clicking the Add More button we add a new row with input form and a button to delete that form.
             $('#add').click(function () {
+                // We iterate the number up by 1 before adding it to the table.
                 i++;
                 $('#dynamic_field').append('<tr id="row' + i + '"><td><input type="text" name="name[]" placeholder="Enter your symptom" class="form-control name_list" /></td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">X</button></td></tr>');
             });
+
+            // Upon clicking one of the remove buttons we will remove that row
             $(document).on('click', '.btn_remove', function () {
+                // Getting the button ID, which is the number at the end of the row ID
                 var button_id = $(this).attr("id");
+
+                // Removing the row on which the button was clicked on.
                 $('#row' + button_id + '').remove();
             });
+
+            // Upon clicking the submit button all of the symptoms will be sent to the api
             $('#submit').click(function () {
-                var lines = [];
+
+                // Create a list, in which we will hold all the symptoms
+                var symptoms = [];
+
+                // Loop through the form and get all of the input values,
+                //      which we will add to the symptoms list
                 $.each($('#add_symptom').serializeArray(), function (i, v) {
-                    if (v.value) lines.push(v.value);
+                    if (v.value) symptoms.push(v.value);
                 });
+
+                // Post the symptoms list to the database to check which disease they match up with
                 $.ajax({
                     type: "POST",
                     url: "/Api/Symptoms",
                     contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify(lines),
-                    dataType: "json",
-                    success: function (data) {
+                    data: JSON.stringify(symptoms),
+                    dataType: "json"
+                }).success(function (data) {
+                    // First we remove all of the previous symptoms
+                    $(".symptom").remove();
 
-                        $(".symptom").remove();
-                        $.each(data, function (i, v) {
-                            $('#symptoms').append('<tr><th class="symptom">' + v + '</th></tr>');
-                        });
-                    }
-                })
+                    // Then we will add new symptoms to the table.
+                    $.each(data, function (i, v) {
+                        $('#symptoms').append('<tr><th class="symptom">' + v + '</th></tr>');
+                    });
+                });
             });
         });
-</script>
+    </script>
 }

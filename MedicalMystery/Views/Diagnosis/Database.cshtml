@@ -36,14 +36,21 @@
     <script>
         $(document).ready(function () {
 
+            // We get the database from the API and append it to the table. 
             getDatabase();
 
+            // Here we make the initial change to the TextArea size, 
+            // Later on it will be changed depending on the table width.
             changeTextArea();
 
+            // Upon resizing the window the TextArea width is changed with it.
             window.addEventListener('resize', function () {
                 changeTextArea();
             });
 
+            // When you click the submit button everything from the textarea 
+            // will be placed into a list of strings and sent to the api. 
+            // There it will be posted to the database and the page will be reloaded on success.
             $('#submit').click(function () {
                 var lines = [];
                 $.each($('#inputDiseases').val().split(/\n/), function (i, line) {
@@ -54,30 +61,45 @@
                     url: "/api/Diseases",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(lines),
-                    dataType: "json",
-                    success: function (data) {
-                        location.reload(true);
-                    }
+                    dataType: "json"
+                }).success(function (data) {
+                    // Reloading the page after successful action
+                    location.reload(true);
                 });
             });
+
+            // When clicking the Clear database button the delete method will be sent
+            // to api/disease, which will clear the database table content. 
+            // This should be removed when it goes live.
             $('#clear').click(function () {
                 $.ajax({
                     type: "DELETE",
                     url: "/api/Diseases",
-                    success: function (data) {
-                        location.reload(true);
-                    }
+                }).success(function (data) {
+                    // Reloading the page after successful action
+                    location.reload(true);
                 });
             }); 
         });
 
+        // Function to change the width of the textarea.
         function changeTextArea() {
+            // Getting the width of the table in which the textarea is in
             var boxWidth = $('#database_area').width() / 2;
+
+            // As there are two tables in the page, if they both line up one under another then their width is the same
+            // When that happens the textarea width will be changed to the width of the table to make it seem more natural.
             if ($('#database_area').width() == $('#text_area').width()) boxWidth = $('#database_area').width();
-            $('#inputDiseases').css("width", boxWidth/1.1);
+
+            // We divide the width by 1.1 so that it wouldn't cause glitches when resizing.
+            $('#inputDiseases').css("width", boxWidth / 1.1);
+
+            // We want the height to be almost half of the width. 
             $('#inputDiseases').css("height", boxWidth/2);
         }
-        
+
+        // This method gets information about database from the api and
+        // appends it all to the table. Disease and the symptoms are lined up on the same row.
         function getDatabase() {
             $.ajax({
                 type: "GET",
@@ -86,19 +108,30 @@
                 dataType: "json",
                 success: function (data) {
 
+                    // First we remove any prior diseases in the page, if there are any.
+                    // This is done to avoid any glitches
                     $("#disease").remove();
+
+                    // Creating an empty string, to which we start adding html code with content
                     var ForAppending = '';
 
                     $.each(data, function (i, v) {
-                        ForAppending += ('<tr class="disease"><th>' + v.name + '</th>')
-                        ForAppending += ('<th>');
 
+                        // To first column we add the Disease name and start the next column also
+                        ForAppending += ('<tr class="disease"><th>' + v.name + '</th><th>')
+
+                        // Foreach symptom we add it to the row as paragraphs so they line up under eachother
                         $.each(v.symptoms, function (i, s) {
                             ForAppending += ('<p>' + s + '</p>');
                         });
 
+                        // Adding the closing html syntax
                         ForAppending += ('</th></tr>');
+
+                        // Appending the html code to the table
                         $('#database').append(ForAppending);
+
+                        // Clearing up the ForAppending for next loop.
                         ForAppending = '';
                     });
                 }
